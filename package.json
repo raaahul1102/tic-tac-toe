@@ -1,0 +1,20 @@
+{
+    "name": "tic-tac-toe",
+    "type": "module",
+    "scripts": {
+        "dev": "tsx watch server.ts",
+        "start": "node --enable-source-maps dist/server.mjs",
+        "build": "vite build",
+        "preview": "node --enable-source-maps dist/server.mjs"
+    },
+    "dependencies": {
+        "ws": "^8.18.0"
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.5",
+        "@types/ws": "^8.5.13",
+        "tsx": "^4.19.2",
+        "typescript": "^5.7.2",
+        "vite": "^6.0.7"
+    }
+}

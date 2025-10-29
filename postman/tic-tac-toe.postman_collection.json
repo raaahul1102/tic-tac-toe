@@ -1,0 +1,142 @@
+{
+  "info": {
+    "name": "Tic Tac Toe - WebSocket",
+    "description": "Collection to test the Tic Tac Toe backend via WebSocket. Start the app with `npm run dev` and connect to `ws://localhost:4321/connect`.\n\nThis collection includes one WebSocket request and a reference of commonly used messages to copy/paste into Postman's WebSocket message input.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Connect WebSocket",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{ws_url}}",
+          "host": [
+            "{{ws_url}}"
+          ]
+        },
+        "description": "Open a WebSocket to the lobby. Use a second tab as another player.\n\nWebSocket URL: `{{ws_url}}`"
+      },
+      "protocolProfileBehavior": {
+        "followRedirects": true,
+        "websocket": true
+      },
+      "response": []
+    },
+    {
+      "name": "Samples (copy/paste into WS tab)",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// This folder only documents sample payloads."
+            ]
+          }
+        }
+      ],
+      "item": [
+        {
+          "name": "Lobby → NewWorld",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{ws_url}}",
+              "host": [
+                "{{ws_url}}"
+              ]
+            },
+            "description": "Send in WS message box (tab connected to {{ws_url}}):\n\n```json\n{\n  \"NewWorld\": {}\n}\n```\n\nExpect: \n```json\n{\n  \"JoinedWorld\": { \n    \"world\": \"<generated-name>\",\n    \"player\": { \"animal\": \"<emoji>\", \"name\": null }\n  }\n}\n```"
+          }
+        },
+        {
+          "name": "Lobby → JoinWorld",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{ws_url}}",
+              "host": [
+                "{{ws_url}}"
+              ]
+            },
+            "description": "Copy the world from the other client's JoinedWorld response, then send:\n\n```json\n{\n  \"JoinWorld\": { \n    \"world\": \"<generated-name>\" \n  }\n}\n```\n\nExpect: \n```json\n{\n  \"Start\": { \n    \"opponent\": { \"animal\": \"<emoji>\", \"sign\": \"X|O\" },\n    \"sign\": \"X|O\",\n    \"turn\": \"X|O\"\n  }\n}\n```"
+          }
+        },
+        {
+          "name": "Game → Mark (place 1..9)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{ws_url}}",
+              "host": [
+                "{{ws_url}}"
+              ]
+            },
+            "description": "Only valid on your turn.\n\n```json\n{\n  \"Mark\": { \n    \"place\": 1 \n  }\n}\n```\n\nExpect Sync/Victory/Draw from server."
+          }
+        },
+        {
+          "name": "Profile → PlayerProfile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{ws_url}}",
+              "host": [
+                "{{ws_url}}"
+              ]
+            },
+            "description": "Update your name/avatar. Other client receives OpponentProfile.\n\n```json\n{\n  \"PlayerProfile\": { \n    \"name\": \"Alice\", \n    \"animal\": \"🐱\" \n  }\n}\n```"
+          }
+        },
+        {
+          "name": "Colors → UpdateColors",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{ws_url}}",
+              "host": [
+                "{{ws_url}}"
+              ]
+            },
+            "description": "Broadcast color updates.\n\n```json\n{\n  \"UpdateColors\": { \n    \"hue\": 200, \n    \"scheme\": \"dark\" \n  }\n}\n```"
+          }
+        },
+        {
+          "name": "Rematch → RequestRematch",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{ws_url}}",
+              "host": [
+                "{{ws_url}}"
+              ]
+            },
+            "description": "Ask for a rematch; other client gets RematchRequested.\n\n```json\n{\n  \"RequestRematch\": {}\n}\n```"
+          }
+        },
+        {
+          "name": "Lobby → CursorMove (optional)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{ws_url}}",
+              "host": [
+                "{{ws_url}}"
+              ]
+            },
+            "description": "While in lobby, send cursor positions; you'll receive CursorSync with others.\n\n```json\n{\n  \"CursorMove\": [120, 240]\n}\n```"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "host", "value": "localhost" },
+    { "key": "port", "value": "4321" },
+    { "key": "ws_url", "value": "ws://{{host}}:{{port}}/connect" }
+  ]
+}
+
+
